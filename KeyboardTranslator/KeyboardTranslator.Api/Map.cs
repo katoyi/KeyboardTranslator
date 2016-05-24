@@ -113,7 +113,7 @@ namespace KeyboardTranslator.Api
             {62, new KeyValuePair<char, char>('>', '/')},
             {63, new KeyValuePair<char, char>('?', '§')}
         };
-        public abstract char GetCharByAssci( int ascci);
-        public abstract char GetCharByChar(char input);
+        public abstract char? GetCharByAscci( int ascci);
+        public abstract char? GetCharByChar(char input);
     }
 }

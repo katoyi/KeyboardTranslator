@@ -5,15 +5,24 @@ namespace KeyboardTranslator.Api
     public class MapQwertyToAzerty : Map
     {
 
-        public override char GetCharByAssci(int ascci)
+        public override char? GetCharByAscci(int ascci)
         {
-            return QwertyAzertyMappingTable.Single(k => k.Key == ascci).Value.Key;
+            var _char = QwertyAzertyMappingTable.FirstOrDefault(k => k.Key == ascci);
+            if (!_char.Equals(null))
+            {
+                return _char.Value.Value;
+            }
+            return null;
         }
 
-        public override char GetCharByChar(char input)
+        public override char? GetCharByChar(char input)
         {
-            return QwertyAzertyMappingTable.Select(m => m.Value).Single(d => d.Key == input).Value;
-
+            var _char = QwertyAzertyMappingTable.Select(m => m.Value).SingleOrDefault(d => d.Key == input);
+            if (!_char.Equals(null))
+            {
+                return _char.Value;
+            }
+            return null;
         }
     }
 }

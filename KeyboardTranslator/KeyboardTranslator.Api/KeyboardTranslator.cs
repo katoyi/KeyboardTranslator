@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Linq;
 
 namespace KeyboardTranslator.Api
@@ -9,7 +10,7 @@ namespace KeyboardTranslator.Api
         {
             Map map = new MapQwertyToAzerty();
             if (ascii.HasValue)
-                return map.GetCharByAssci(ascii.Value);
+                return map.GetCharByAscci(ascii.Value);
             if (qwertyChar.HasValue)
                 return map.GetCharByChar(qwertyChar.Value);
             return null;
@@ -21,14 +22,20 @@ namespace KeyboardTranslator.Api
             if (string.IsNullOrEmpty(qwertyString))
                 return null;
             var arrayOfChar = qwertyString.ToCharArray();
-            return arrayOfChar.Aggregate(result, (current, c) => current + ToAzertyChar(c));
+            foreach (var charRes in arrayOfChar.Select(c => ToAzertyChar(c)))
+            {
+                if (!charRes.HasValue)
+                    throw new Exception("Unknown char");
+                result += charRes.Value;
+            }
+            return result;
         }
 
         public static char? ToQwertyChar(char? azertyChar = null, int? ascii = null)
         {
             Map map = new MapAzertyToQwerty();
             if (ascii.HasValue)
-                return map.GetCharByAssci(ascii.Value);
+                return map.GetCharByAscci(ascii.Value);
             if (azertyChar.HasValue)
                 return map.GetCharByChar(azertyChar.Value);
             return null;
@@ -40,7 +47,13 @@ namespace KeyboardTranslator.Api
             if (string.IsNullOrEmpty(azertyString))
                 return null;
             var arrayOfChar = azertyString.ToCharArray();
-            return arrayOfChar.Aggregate(result, (current, c) => current + ToQwertyChar(c));
+            foreach (var charRes in arrayOfChar.Select(c => ToQwertyChar(c)))
+            {
+                if (!charRes.HasValue)
+                    throw new Exception("Unknown char");
+                result += charRes.Value;
+            }
+            return result;
 
         }
     }
